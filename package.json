@@ -16,8 +16,10 @@
   },
   "dependencies": {
       "hubiquitus": "git://github.com/Oliviergg/hubiquitus",
-      "hubiquitus": "git://github.com/Oliviergg/hubiquitus4js",
+      "hubiquitus4js": "git://github.com/Oliviergg/hubiquitus4js",
       "express": ">=3.2.4",
+      "polyline": ">=0.0.0",
+      "optimist": ">=0.5.2"
   },
   "devDependencies": {
       "should" : "=1.2.2",

@@ -59,7 +59,8 @@ $(document).ready(function(){
 			}
 		};
 		// Starts a connection to the XMPP Server using passed options.
-		hClient.connect('urn:localhost:u1', 'urn:localhost:u1')
+hOptions ={ endpoints:["http://test.apila.fr:8080"]}
+		hClient.connect('urn:localhost:u1', 'urn:localhost:u1',hOptions)
 
 	},2000)
 

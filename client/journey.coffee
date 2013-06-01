@@ -28,9 +28,9 @@ class Journey
 		steps=[];
 		gm_steps = route.legs[0].steps;
 		gm_steps.forEach (gm_step) =>
-			# duration=gm_step.duration.value;
-			# duration = 60 if duration < 60
-			duration = 1
+			duration=gm_step.duration.value;
+			duration = 60 if duration < 60
+			#duration = 1
 			points=polyline.decodeLine(gm_step.polyline.points);
 			step_duration = duration/points.length;
 			if step_duration>2.0
