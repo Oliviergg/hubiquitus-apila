@@ -47,9 +47,22 @@ hubiquitus.start({
       adapters: [{type: "socket_in"}]
     },
     {
-      actor: "urn:localhost:instanceDriver",
-      type: "instanceDriverActor",
+      actor: "urn:localhost:driver",
+      type: "driverActor",
       adapters: [{type: "socket_in"}]
+    },
+    {
+      actor: "urn:localhost:broadcastChannel",
+      type: "hchannel",
+      properties: {
+        subscribers: [],
+        collection: "broadcastChannel",
+        db:{
+          host: "localhost",
+          port: 27017,
+          name: "onRadio"
+        },
+      }
     },
 
     // {
