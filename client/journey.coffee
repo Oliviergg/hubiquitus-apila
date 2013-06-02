@@ -9,14 +9,24 @@ class Journey
 		@stepId = 0
 		@steps=[]
 		@buildJourney()
+		journey = @
 
-		@driver = new Driver()
-		@driver.onOpen () =>
-			steps = @buildJourney();
+		@driver = new Driver(hOptions:{endpoints:["http://test.apila.fr:8080"]})
+		@driver.onOpen = () ->
+			@received_count=0
+			steps = journey.buildJourney();
 			console.log("Lancement de "+pseudo+" dans "+"delay"+" ms");
 			setTimeout =>
-				@nextStep()
+				journey.nextStep()
 			,0
+
+			setInterval =>
+				console.log(@hClient.getBareURN(@hClient.fullurn),@received_count)
+			, 1000
+
+
+		@driver.onMessage = (hMessage) ->
+			@received_count+=1
 
 	
 	buildJourney:()->
@@ -28,9 +38,9 @@ class Journey
 		steps=[];
 		gm_steps = route.legs[0].steps;
 		gm_steps.forEach (gm_step) =>
-			duration=gm_step.duration.value;
-			duration = 60 if duration < 60
-			#duration = 1
+			# duration=gm_step.duration.value;
+			# duration = 60 if duration < 60
+			duration = 1
 			points=polyline.decodeLine(gm_step.polyline.points);
 			step_duration = duration/points.length;
 			if step_duration>2.0
@@ -60,7 +70,7 @@ class Journey
 		step = @steps[@stepId]
 		lat = step.coord[0]
 		lng = step.coord[1]
-		console.log("Pseudo #{@pseudo} - #{(Math.round(@stepId / (@totalSteps - 1 )*10000)) / 100.0} % lat : #{lat} lon : #{lng}")
+		# console.log("Pseudo #{@pseudo} - #{(Math.round(@stepId / (@totalSteps - 1 )*10000)) / 100.0} % lat : #{lat} lon : #{lng}")
 		@stepId += 1
 		@driver.setGeolocation lat:lat,lng:lng
 		setTimeout =>

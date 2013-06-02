@@ -4,33 +4,38 @@ class WrapperHClient
 	constructor: (options) ->
 		options = options || {}
 		@hClient = new HubiquitusClient()
+		@options = options
 		@hOptions = options.hOptions || {}
-		my = @
-		@hClient.onStatus = (hStatus) ->
+		
+		@hClient.onStatus = (hStatus) =>
 			console.log('hClient New Status', hStatus);
-			return if hStatus.status isnt @statuses.CONNECTED
+			return if hStatus.status isnt @hClient.statuses.CONNECTED
 			console.log "connected"
-			my.onConnectCallback()
+			@onConnectCallback()
+
 
 	connect: (user,password) ->
 		console.log("WrapperHClient connect")
-		@hClient.onMessage = @onMessage
+		if @beforeOnMessage?
+			@hClient.onMessage = @internalOnMessage
+		else
+			@hClient.onMessage = @onMessage
+		
 		@hClient.connect(user,password, @hOptions);
 
 	onConnectCallback: ()->
 		console.log("WrapperHClient onConnectCallback")
-		@onOpenCallback()
+		@onOpen()
 
-	onOpenCallback: () ->
-		console.log("WrapperHClient onOpenCallback")
+	onOpen: () ->
+		console.log("WrapperHClient default onOpen")
 
-	onOpen: (callback) ->
-		console.log("WrapperHClient onOpen")
-		@onOpenCallback = callback
+	internalOnMessage: (hMessage) =>
+		cont = @beforeOnMessage(hMessage)
+		@onMessage(hMessage) if cont
 
-	onMessage: (hMessage) -> 
-		console.log("WrapperHClient onMessage")
-		console.log hMessage
+	onMessage: (hMessage) ->
+		console.log("WrapperHClient default on message")
 
 	sendMessage: (command) ->
 		mess = @hClient.buildMessage(@actor, command.cmd, command.params, location:{pos:@location})

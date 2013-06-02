@@ -13,7 +13,36 @@ function initialize() {
 $(document).ready(function(){
 	initialize();
 	var markers=[];
+
+  filterCircle = new google.maps.Circle({
+    strokeColor: "#3333ff",
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: "#3333ff",
+    fillOpacity: 0.18,
+    map: Global.map,
+    center: Global.map.center,
+    radius: 5000
+   });
+
+  var refrehCenter=null;
+
 	setTimeout(function(){
+		google.maps.event.addListener(Global.map, 'center_changed', function() {
+			console.log("set center");
+			clearTimeout(refrehCenter);
+			refrehCenter = setTimeout(function(){
+				filterCircle.setCenter(Global.map.center)
+
+				hClient.setFilter({
+					geo:{
+						lat:Global.map.center.lat(),
+						lng:Global.map.center.lng(),
+						radius: 5000
+					}
+				})				
+			},1000)
+	  });
 
 		//Sets a listener for incoming real time messages
 		hClient.onMessage = function(hMessage){
@@ -50,9 +79,9 @@ $(document).ready(function(){
 				});
 				this.setFilter({
 					geo: {
-								// lat: 48.8,
-								// lng: 2.3,
-								// radius: 5000
+								lat:Global.map.center.lat(),
+								lng:Global.map.center.lng(),
+								radius: 5000
 							 }
 					})
 

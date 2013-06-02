@@ -1,0 +1,12 @@
+doctype 5
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    block content
+script(src="javascripts/vendor/jquery.min.js")
+script(src="https://maps.googleapis.com/maps/api/js?&sensor=true")
+script(src='javascripts/vendor/hubiquitus4js/lib/transports/socketio/socket.io.js')
+script(data-main="javascripts/vendor/hubiquitus4js/hubiquitus.js",src='javascripts/vendor/hubiquitus4js/lib/require.js')
+script(src="javascripts/index.js")
